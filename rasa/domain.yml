@@ -1,0 +1,79 @@
+version: '3.0'
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+intents:
+- deny
+- goodbye
+- inform
+- affirm
+- cancel_transfer
+- send_transfer
+- greet
+- mood_great
+- mood_unhappy
+- modify_transfer
+- reset_transfer
+entities:
+- number
+slots:
+  transfer_recipient:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: number
+      role: transfer_recipient
+  transfer_amount:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: number
+      role: transfer_amount
+responses:
+  utter_confirm_modify_transfer:
+  - text: No problem.
+  utter_confirm_reset_transfer:
+  - text: No problem, let's start over.
+  utter_confirm_cancellation:
+  - text: Your transfer has been cancelled. Is there anything else I can do for you?
+  utter_send_transfer_slots:
+  - text: Would you like to confirm sending {transfer_amount} to account {transfer_recipient}?
+  utter_ask_transfer_recipient:
+  - text: What account do you want to send money to?
+  utter_ask_transfer_amount:
+  - text: How much money do you want to send?
+  utter_ask_continue:
+  - text: Are you sure you want to cancel this transfer?
+  utter_submit:
+  - text: Your transaction is pending, you and {transfer_recipient} will receive a text message when the transaction is confirmed
+  utter_greet:
+  - text: Hey! How are you?
+  utter_cheer_up:
+  - text: 'Here is something to cheer you up:'
+    image: https://i.imgur.com/nGF1K8f.jpg
+  utter_did_that_help:
+  - text: Did that help you?
+  utter_happy:
+  - text: Great, carry on!
+  utter_goodbye:
+  - text: Bye
+  utter_iamabot:
+  - text: I am a bot, powered by Rasa.
+actions:
+- action_slot_reset
+- utter_ask_continue
+- utter_confirm_cancellation
+- utter_confirm_modify_transfer
+- utter_confirm_reset_transfer
+- utter_goodbye
+- utter_greet
+- utter_send_transfer_slots
+- utter_submit
+- validate_send_transfer_form
+forms:
+  send_transfer_form:
+    required_slots:
+    - transfer_recipient
+    - transfer_amount

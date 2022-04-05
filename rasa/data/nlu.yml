@@ -1,0 +1,179 @@
+version: "3.0"
+nlu:
+- intent: inform
+  examples: |
+    - I want to send [333]{"entity": "number", "role": "transfer_amount"}
+    - send [23]{"entity": "number", "role": "transfer_amount"}
+    - I want to transfer [10]{"entity": "number", "role": "transfer_amount"}
+    - I want to send [5000]{"entity": "number", "role": "transfer_amount"}
+    - Send [2]{"entity": "number", "role": "transfer_amount"}
+    - Give [5]{"entity": "number", "role": "transfer_amount"}
+    - I want to send to [5]{"entity": "number", "role": "transfer_recipient"}
+    - send to [4]{"entity": "number", "role": "transfer_recipient"}
+    - I want to transfer to [3]{"entity": "number", "role": "transfer_recipient"}
+    - I want to send to [2]{"entity": "number", "role": "transfer_recipient"}
+    - Send to [2]{"entity": "number", "role": "transfer_recipient"}
+    - Give to [5]{"entity": "number", "role": "transfer_recipient"}
+    - I want to send to [333]{"entity": "number", "role": "transfer_recipient"}
+    - to account number [5]{"entity": "number", "role": "transfer_recipient"}
+    - I'd like to send [100]{"entity": "number", "role": "transfer_amount"}
+    - I'd like to send money to account [2]{"entity": "number", "role": "transfer_recipient"}
+    - I'd like to send [3000]{"entity": "number", "role": "transfer_amount"} to account [3]{"entity": "number", "role": "transfer_recipient"}
+    - I want to send [54]{"entity": "number", "role": "transfer_amount"} to account [3]{"entity": "number", "role": "transfer_recipient"}
+    - I want to send [100]{"entity": "number", "role": "transfer_amount"} to account [3]{"entity": "number", "role": "transfer_recipient"}
+    - account [5]{"entity": "number", "role": "transfer_recipient"}
+    - actually i want to send to account [6]{"entity": "number", "role": "transfer_recipient"}
+    - i want to send [100]{"entity": "number", "role": "transfer_amount"} to account [4]{"entity": "number", "role": "transfer_recipient"}
+    - account [7]{"entity": "number", "role": "transfer_recipient"}
+    - account [4]{"entity": "number", "role": "transfer_recipient"}
+    - i want to send [5]{"entity": "number", "role": "transfer_amount"} to account [5]{"entity": "number", "role": "transfer_recipient"}
+    - i want to send [100]{"entity": "number", "role": "transfer_amount"} to account [3]{"entity": "number", "role": "transfer_recipient"}
+    - send [500]{"entity": "number", "role": "transfer_amount"} to account [3]{"entity": "number", "role": "transfer_recipient"}
+    - send [100]{"entity": "number", "role": "transfer_amount"} to account [3]{"entity": "number", "role": "transfer_recipient"}
+    - i want to send [100]{"entity": "number", "role": "transfer_amount"} dollars
+    - account [3]{"entity": "number", "role": "transfer_recipient"}
+    - send [25]{"entity": "number", "role": "transfer_amount"} to acount [2]{"entity": "number", "role": "transfer_recipient"}
+    - I want to send money to account [3]{"entity": "number", "role": "transfer_recipient"}
+    - [100]{"entity": "number", "role": "transfer_amount"} dollars
+    - account [2]{"entity": "number", "role": "transfer_recipient"}
+    - i want to send [100]{"entity": "number", "role": "transfer_amount"} to account [5]{"entity": "number", "role": "transfer_recipient"}
+    - I want to send money to account [222]{"entity": "number", "role": "transfer_recipient"}
+    - I want to send [1000000000000000000]{"entity": "number", "role": "transfer_amount"}
+    - i want to send [100]{"entity": "number", "role": "transfer_amount"} dollars to account [3]{"entity": "number", "role": "transfer_recipient"}
+    - I want to send [100]{"entity": "number", "role": "transfer_amount"} dollars
+    - I want to send money to account [4]{"entity": "number", "role": "transfer_recipient"}
+    - send [100]{"entity": "number", "role": "transfer_amount"} dollars
+    - send money to account [4]{"entity": "number", "role": "transfer_recipient"}
+    - [300]{"entity": "number", "role": "transfer_amount"} dollars
+    - send money to account [2]{"entity": "number", "role": "transfer_recipient"}
+    - send [300]{"entity": "number", "role": "transfer_amount"}
+    - Send to account [4]{"entity": "number", "role": "transfer_recipient"}
+    - I want to send money to account [4]{"entity": "number", "role": "transfer_recipient"}
+    - [300]{"entity": "number", "role": "transfer_amount"}
+    - i want to send [100]{"entity": "number", "role": "transfer_amount"}
+    - [3]{"entity": "number", "role": "transfer_recipient"}
+    - I want to send money to account [3]{"entity": "number", "role": "transfer_recipient"}
+    - [450]{"entity": "number", "role": "transfer_amount"}
+    - I want to send [100]{"entity": "number", "role": "transfer_amount"}
+    - I want to send [10]{"entity": "number", "role": "transfer_amount"}
+- intent: send_transfer
+  examples: |
+    - I want to send
+    - I want to send money
+    - I want to give money
+    - I want to transfer money
+    - I want to exchange money
+    - I want to make a transaction
+    - Can I send
+    - Can I send money
+    - Can I give money
+    - Can I transfer money
+    - Can I exchange money
+    - Can I make a transaction
+    - i want to transfer money
+    - i want to send money
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+    - thanks
+    - thx
+    - thnx
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+    - ye
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+- intent: cancel_transfer
+  examples: |
+    - Actually I want to cancel
+    - I dont want send money anymore
+    - cancel the transfer
+    - stop the transfer
+    - I changed my mind, I dont want to send
+    - revert the transfer
+    - actually cancel
+    - cancel
+    - yes cancel
+    - no wait, cancel that
+- intent: modify_transfer
+  examples: |
+    - I want to send [321]{"entity": "number", "role": "transfer_amount"} instead
+    - Actually send it to account [3]{"entity": "number", "role": "transfer_recipient"} instead
+    - Can I change that, I want to send [1220]{"entity": "number", "role": "transfer_amount"} to account [4]{"entity": "number", "role": "transfer_recipient"} instead
+- intent: reset_transfer
+  examples: |
+    - I want to make a change
+    - I want to change who I am sending to
+    - I want to change the amount I am sending
+    - I want to start over
+    - Sorry I made a mistake
+    - I meant to send it to someone else

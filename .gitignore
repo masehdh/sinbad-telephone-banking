@@ -1,0 +1,8 @@
+.env
+node_modules
+rasa/venv
+rasa/models
+voice recordings
+vonage_gpt3/private.key
+azure
+rasa/.rasa

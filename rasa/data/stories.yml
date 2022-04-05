@@ -1,0 +1,341 @@
+version: "3.0"
+
+stories:
+
+# happy path where user says send money first
+- story: send transfer happy path
+  steps:
+  - intent: send_transfer
+  - action: send_transfer_form
+  - active_loop: send_transfer_form
+  - slot_was_set:
+    - requested_slot: transfer_recipient
+  - slot_was_set:
+    - transfer_recipient: 2
+  - slot_was_set:
+    - requested_slot: transfer_amount
+  - slot_was_set:
+    - transfer_amount: 100
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_send_transfer_slots
+  - intent: affirm
+  - action: utter_submit
+  - intent: goodbye
+  - action: utter_goodbye
+
+# user cancels transfer
+- story: cancel_transfer after setting recipient and amount
+  steps:
+  - action: utter_send_transfer_slots
+  - intent: deny
+  - action: utter_ask_continue
+  - intent: affirm
+  - action: action_slot_reset
+  - action: utter_confirm_cancellation
+  - action: action_listen
+
+# user cancels transfer halfway through loop
+# - story: cancel_transfer while the loop is running
+#   steps:
+#   - action: send_transfer_form
+#   - active_loop: send_transfer_form
+#   - intent: cancel_transfer
+#   - action: utter_ask_continue
+#   - intent: affirm
+#   - action: action_slot_reset
+#   - action: utter_confirm_cancellation
+
+# When user informs recipient and amount first
+- story: User provides amount and recipient right away
+  steps:
+  - intent: inform
+    entities:
+    - number: '100'
+    - number: '3'
+  - slot_was_set:
+    - transfer_recipient: '3'
+  - slot_was_set:
+    - transfer_amount: '100'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_recipient: 3
+  - slot_was_set:
+    - transfer_amount: 100
+  - action: utter_send_transfer_slots
+  - intent: affirm
+  - action: utter_submit
+  - intent: goodbye
+  - action: utter_goodbye
+
+# When user informs recipient first
+- story: User provides recipient right away
+  steps:
+  - intent: inform
+    entities:
+    - number: '3'
+  - slot_was_set:
+    - transfer_recipient: '3'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_recipient: 3
+  - action: send_transfer_form
+  - active_loop: send_transfer_form
+  - slot_was_set:
+    - requested_slot: transfer_amount
+  - slot_was_set:
+    - transfer_amount: 100
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_send_transfer_slots
+  - intent: affirm
+  - action: utter_submit
+  - intent: goodbye
+  - action: utter_goodbye
+
+# When user informs amount first
+- story: User provides amount right away
+  steps:
+  - intent: inform
+    entities:
+    - number: '100'
+  - slot_was_set:
+    - transfer_amount: '100'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_amount: 100
+  - action: send_transfer_form
+  - active_loop: send_transfer_form
+  - slot_was_set:
+    - requested_slot: transfer_recipient
+  - slot_was_set:
+    - transfer_recipient: 3
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_send_transfer_slots
+  - intent: affirm
+  - action: utter_submit
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: inform
+    entities:
+    - number: '25'
+    - number: '2'
+  - slot_was_set:
+    - transfer_recipient: '2'
+  - slot_was_set:
+    - transfer_amount: '25'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_recipient: 2
+  - slot_was_set:
+    - transfer_amount: 25
+  - action: utter_send_transfer_slots
+  - intent: affirm
+  - action: utter_submit
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_2
+  steps:
+  - intent: inform
+    entities:
+    - number: '3'
+  - slot_was_set:
+    - transfer_recipient: '3'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_recipient: 3
+  - action: send_transfer_form
+  - active_loop: send_transfer_form
+  - slot_was_set:
+    - transfer_recipient: 3
+  - slot_was_set:
+    - requested_slot: transfer_amount
+  - slot_was_set:
+    - transfer_amount: '100'
+  - slot_was_set:
+    - transfer_amount: 100
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_send_transfer_slots
+  - intent: affirm
+  - action: utter_submit
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_3
+  steps:
+  - intent: inform
+    entities:
+    - number: '100'
+  - slot_was_set:
+    - transfer_amount: '100'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_amount: 100
+  - action: send_transfer_form
+  - active_loop: send_transfer_form
+  - slot_was_set:
+    - transfer_amount: 100
+  - slot_was_set:
+    - requested_slot: transfer_recipient
+  - slot_was_set:
+    - transfer_recipient: '2'
+  - slot_was_set:
+    - transfer_recipient: 2
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_send_transfer_slots
+  - intent: affirm
+  - action: utter_submit
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: inform
+    entities:
+    - number: '100'
+    - number: '5'
+  - slot_was_set:
+    - transfer_recipient: '5'
+  - slot_was_set:
+    - transfer_amount: '100'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_recipient: 5
+  - slot_was_set:
+    - transfer_amount: 100
+  - action: utter_send_transfer_slots
+  - intent: affirm
+  - action: utter_submit
+
+- story: interactive_story_2
+  steps:
+  - intent: inform
+    entities:
+    - number: '222'
+  - slot_was_set:
+    - transfer_recipient: '222'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_recipient: null
+
+- story: interactive_story_3
+  steps:
+  - intent: inform
+    entities:
+    - number: '0'
+  - slot_was_set:
+    - transfer_amount: '0'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_amount: null
+
+- story: interactive_story_4
+  steps:
+  - intent: inform
+    entities:
+    - number: '1000000000000000000'
+  - slot_was_set:
+    - transfer_amount: '1000000000000000000'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_amount: null
+
+- story: interactive_story_5 (cancel after transfer amount and recipient given outside of form)
+  steps:
+  - intent: inform
+    entities:
+    - number: '100'
+    - number: '3'
+  - slot_was_set:
+    - transfer_recipient: '3'
+  - slot_was_set:
+    - transfer_amount: '100'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_recipient: 3
+  - slot_was_set:
+    - transfer_amount: 100
+  - action: utter_send_transfer_slots
+  - intent: deny
+  - action: utter_ask_continue
+  - intent: affirm
+  - action: action_slot_reset
+  - action: utter_confirm_cancellation
+
+- story: interactive_story_2
+  steps:
+  - intent: inform
+    entities:
+    - number: '4'
+  - slot_was_set:
+    - transfer_recipient: '4'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_recipient: 4
+  - action: send_transfer_form
+  - active_loop: send_transfer_form
+  - slot_was_set:
+    - transfer_recipient: 4
+  - slot_was_set:
+    - requested_slot: transfer_amount
+  - slot_was_set:
+    - transfer_amount: '300'
+  - slot_was_set:
+    - transfer_amount: 300
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_send_transfer_slots
+  - intent: cancel_transfer
+  - action: utter_ask_continue
+  - intent: cancel_transfer
+  - action: action_slot_reset
+  - action: utter_confirm_cancellation
+
+- story: interactive_story_1
+  steps:
+  - intent: inform
+    entities:
+    - number: '300'
+  - action: action_extract_slots
+  - slot_was_set:
+    - transfer_amount: '300'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_amount: 300
+  - action: send_transfer_form
+  - active_loop: send_transfer_form
+  - slot_was_set:
+    - transfer_amount: 300
+  - slot_was_set:
+    - requested_slot: transfer_recipient
+
+- story: interactive_story_6
+  steps:
+  - intent: inform
+    entities:
+    - number: '100'
+  - action: action_extract_slots
+  - slot_was_set:
+    - transfer_amount: '100'
+  - action: validate_send_transfer_form
+  - slot_was_set:
+    - transfer_amount: 100
+  - action: send_transfer_form
+  - active_loop: send_transfer_form
+  - slot_was_set:
+    - transfer_amount: 100
+  - slot_was_set:
+    - requested_slot: transfer_recipient

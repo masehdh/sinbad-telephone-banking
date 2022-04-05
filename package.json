@@ -1,0 +1,28 @@
+{
+  "name": "sinbad",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/masehdh/SinBad.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/masehdh/SinBad/issues"
+  },
+  "homepage": "https://github.com/masehdh/SinBad#readme",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-ws": "^5.0.2",
+    "microsoft-cognitiveservices-speech-sdk": "^1.20.0",
+    "openai": "^2.0.5",
+    "web3": "^1.7.1"
+  }
+}
