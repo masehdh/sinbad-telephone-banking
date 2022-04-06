@@ -2,6 +2,15 @@ version: "3.0"
 nlu:
 - intent: inform
   examples: |
+    - [1]{"entity": "number"}
+    - [2]{"entity": "number"}
+    - [3]{"entity": "number"}
+    - [4]{"entity": "number"}
+    - [5]{"entity": "number"}
+    - [100]{"entity": "number"}
+    - [2567]{"entity": "number"}
+    - [721321567]{"entity": "number"}
+    - [534412]{"entity": "number"}
     - I want to send [333]{"entity": "number", "role": "transfer_amount"}
     - send [23]{"entity": "number", "role": "transfer_amount"}
     - I want to transfer [10]{"entity": "number", "role": "transfer_amount"}
@@ -44,16 +53,12 @@ nlu:
     - I want to send money to account [4]{"entity": "number", "role": "transfer_recipient"}
     - send [100]{"entity": "number", "role": "transfer_amount"} dollars
     - send money to account [4]{"entity": "number", "role": "transfer_recipient"}
-    - [300]{"entity": "number", "role": "transfer_amount"} dollars
     - send money to account [2]{"entity": "number", "role": "transfer_recipient"}
     - send [300]{"entity": "number", "role": "transfer_amount"}
     - Send to account [4]{"entity": "number", "role": "transfer_recipient"}
     - I want to send money to account [4]{"entity": "number", "role": "transfer_recipient"}
-    - [300]{"entity": "number", "role": "transfer_amount"}
     - i want to send [100]{"entity": "number", "role": "transfer_amount"}
-    - [3]{"entity": "number", "role": "transfer_recipient"}
     - I want to send money to account [3]{"entity": "number", "role": "transfer_recipient"}
-    - [450]{"entity": "number", "role": "transfer_amount"}
     - I want to send [100]{"entity": "number", "role": "transfer_amount"}
     - I want to send [10]{"entity": "number", "role": "transfer_amount"}
 - intent: send_transfer

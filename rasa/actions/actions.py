@@ -81,6 +81,9 @@ class ValidateSendTransferForm(FormValidationAction):
         # transfer_recipient = int(self.from_entity(entity="number", role="transfer_recipient"))
         transfer_recipient = int(tracker.get_slot("transfer_recipient"))
 
+        # if tracker.latest_action_name() == "utter_"
+        # if FormValidationAction.next_requested_slot() == "transfer_amount"
+
         if transfer_recipient not in ALLOWED_ACCOUNT_NUMBERS:
             dispatcher.utter_message(text=f'Account {transfer_recipient} does not exist, please try again.')
             return {"transfer_recipient": None}

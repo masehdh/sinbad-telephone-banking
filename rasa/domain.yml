@@ -24,6 +24,11 @@ slots:
     - type: from_entity
       entity: number
       role: transfer_recipient
+    - type: from_entity
+      entity: number
+      conditions:
+      - active_loop: send_transfer_form
+        requested_slot: transfer_recipient
   transfer_amount:
     type: text
     influence_conversation: true
@@ -31,6 +36,11 @@ slots:
     - type: from_entity
       entity: number
       role: transfer_amount
+    - type: from_entity
+      entity: number
+      conditions:
+      - active_loop: send_transfer_form
+        requested_slot: transfer_amount
 responses:
   utter_confirm_modify_transfer:
   - text: No problem.
