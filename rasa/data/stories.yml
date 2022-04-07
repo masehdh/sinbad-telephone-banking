@@ -22,6 +22,9 @@ stories:
   - action: utter_send_transfer_slots
   - intent: affirm
   - action: utter_submit
+  - action: action_send_transfer
+  - action: action_send_receipt
+  - action: action_listen
   - intent: goodbye
   - action: utter_goodbye
 
@@ -66,6 +69,9 @@ stories:
   - action: utter_send_transfer_slots
   - intent: affirm
   - action: utter_submit
+  - action: action_send_transfer
+  - action: action_send_receipt
+  - action: action_listen
   - intent: goodbye
   - action: utter_goodbye
 
@@ -92,6 +98,9 @@ stories:
   - action: utter_send_transfer_slots
   - intent: affirm
   - action: utter_submit
+  - action: action_send_transfer
+  - action: action_send_receipt
+  - action: action_listen
   - intent: goodbye
   - action: utter_goodbye
 
@@ -118,6 +127,9 @@ stories:
   - action: utter_send_transfer_slots
   - intent: affirm
   - action: utter_submit
+  - action: action_send_transfer
+  - action: action_send_receipt
+  - action: action_listen
   - intent: goodbye
   - action: utter_goodbye
 
@@ -139,6 +151,9 @@ stories:
   - action: utter_send_transfer_slots
   - intent: affirm
   - action: utter_submit
+  - action: action_send_transfer
+  - action: action_send_receipt
+  - action: action_listen
   - intent: goodbye
   - action: utter_goodbye
 
@@ -168,7 +183,9 @@ stories:
   - action: utter_send_transfer_slots
   - intent: affirm
   - action: utter_submit
-  - intent: goodbye
+  - action: action_send_transfer
+  - action: action_send_receipt
+  - action: action_listen
   - action: utter_goodbye
 
 - story: interactive_story_3
@@ -197,7 +214,9 @@ stories:
   - action: utter_send_transfer_slots
   - intent: affirm
   - action: utter_submit
-  - intent: goodbye
+  - action: action_send_transfer
+  - action: action_send_receipt
+  - action: action_listen
   - action: utter_goodbye
 
 - story: interactive_story_1
@@ -218,6 +237,9 @@ stories:
   - action: utter_send_transfer_slots
   - intent: affirm
   - action: utter_submit
+  - action: action_send_transfer
+  - action: action_send_receipt
+  - action: action_listen
 
 - story: interactive_story_2
   steps:
@@ -339,3 +361,30 @@ stories:
     - transfer_amount: 100
   - slot_was_set:
     - requested_slot: transfer_recipient
+- story: interactive_story_1
+  steps:
+  - intent: send_transfer
+  - action: send_transfer_form
+  - active_loop: send_transfer_form
+  - slot_was_set:
+    - requested_slot: transfer_recipient
+  - slot_was_set:
+    - transfer_recipient: '1'
+  - slot_was_set:
+    - transfer_recipient: 1
+  - slot_was_set:
+    - requested_slot: transfer_amount
+  - slot_was_set:
+    - transfer_amount: '10000000000'
+  - slot_was_set:
+    - transfer_amount: 10000000000
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_send_transfer_slots
+  - intent: affirm
+  - action: utter_submit
+  - action: action_send_transfer
+  - action: action_send_receipt
+  - intent: goodbye
+  - action: utter_goodbye

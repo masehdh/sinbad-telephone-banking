@@ -35,7 +35,7 @@ app
   })
   .post("/webhooks/asr", (request, response) => {
     // const configuration = new Configuration({
-    //   apiKey: "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",
+    //   apiKey: "",
     // });
     // const openai = new OpenAIApi(configuration);
 

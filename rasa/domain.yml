@@ -3,12 +3,12 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 intents:
-- deny
-- goodbye
 - inform
 - affirm
-- cancel_transfer
 - send_transfer
+- goodbye
+- deny
+- cancel_transfer
 - greet
 - mood_great
 - mood_unhappy
@@ -41,6 +41,10 @@ slots:
       conditions:
       - active_loop: send_transfer_form
         requested_slot: transfer_amount
+  transaction_hash:
+    type: text
+    mappings:
+    - type: custom
 responses:
   utter_confirm_modify_transfer:
   - text: No problem.
@@ -57,7 +61,7 @@ responses:
   utter_ask_continue:
   - text: Are you sure you want to cancel this transfer?
   utter_submit:
-  - text: Your transaction is pending, you and {transfer_recipient} will receive a text message when the transaction is confirmed
+  - text: One moment please.
   utter_greet:
   - text: Hey! How are you?
   utter_cheer_up:
@@ -72,6 +76,8 @@ responses:
   utter_iamabot:
   - text: I am a bot, powered by Rasa.
 actions:
+- action_send_receipt
+- action_send_transfer
 - action_slot_reset
 - utter_ask_continue
 - utter_confirm_cancellation

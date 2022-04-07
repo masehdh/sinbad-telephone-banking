@@ -75,12 +75,16 @@ rules:
   - action: utter_send_transfer_slots
   - intent: affirm
   - action: utter_submit
+  - action: action_send_transfer
+  - action: action_send_receipt
 
 - rule: final submission
   steps:
   - action: utter_send_transfer_slots
   - intent: affirm
   - action: utter_submit
+  - action: action_send_transfer
+  - action: action_send_receipt
 
 - rule: scenario 1
   steps:
@@ -93,10 +97,6 @@ rules:
   - slot_was_set:
     - transfer_amount: '100'
   - action: validate_send_transfer_form
-  # - slot_was_set:
-  #   - transfer_recipient: 3
-  # - slot_was_set:
-  #   - transfer_amount: 100
   - action: utter_send_transfer_slots
 
 
@@ -108,14 +108,8 @@ rules:
   - slot_was_set:
     - transfer_recipient: '3'
   - action: validate_send_transfer_form
-  # - slot_was_set:
-  #   - transfer_recipient: 3
   - action: send_transfer_form
   - active_loop: send_transfer_form
-  # - slot_was_set:
-  #   - requested_slot: transfer_amount
-  # - slot_was_set:
-  #   - transfer_amount: 100
   - slot_was_set:
     - requested_slot: null
   - active_loop: null
@@ -129,14 +123,8 @@ rules:
   - slot_was_set:
     - transfer_amount: '100'
   - action: validate_send_transfer_form
-  # - slot_was_set:
-  #   - transfer_amount: 100
   - action: send_transfer_form
   - active_loop: send_transfer_form
-  # - slot_was_set:
-  #   - requested_slot: transfer_recipient
-  # - slot_was_set:
-  #   - transfer_recipient: 3
   - slot_was_set:
     - requested_slot: null
   - active_loop: null
