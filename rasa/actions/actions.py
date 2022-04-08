@@ -31,10 +31,10 @@ w3 = Web3(
 acct = w3.eth.account.privateKeyToAccount(key)
 
 # Set up for sms follow up
-vonage_api_key = os.environ.get("VONAGE_API_KEY")
-vonage_secret = os.environ.get("VONAGE_SECRET")
-client = vonage.Client(key=vonage_api_key, secret=vonage_secret)
-sms = vonage.Sms(client)
+# vonage_api_key = os.environ.get("VONAGE_API_KEY")
+# vonage_secret = os.environ.get("VONAGE_SECRET")
+# client = vonage.Client(key=vonage_api_key, secret=vonage_secret)
+# sms = vonage.Sms(client)
 
 # Stand in list of existing account numbers for validate_transfer_recipient
 ALLOWED_ACCOUNT_NUMBERS = [1,2,3,4,5]
@@ -95,23 +95,16 @@ class SendReceipt(Action):
         
         transaction_hash = tracker.get_slot("transaction_hash")
         amount = tracker.get_slot("transfer_amount")
+        receipt_payload = {
+            "transaction_hash": transaction_hash,
+            "transfer_amount": amount
+        }
+        print(receipt_payload)
 
-        transaction = w3.eth.wait_for_transaction_receipt(transaction_hash)
-        blockNumber = transaction.blockNumber
+        #put the async post request here for the txn receipt with slot values on node server
+        response = requests.post("http://53a6-99-228-62-199.ngrok.io/webhooks/receipt", json=receipt_payload)
 
-        sinbad_recipient_final = {public_address for public_address in ACCOUNT_MAPPING if ACCOUNT_MAPPING[public_address]==transaction.to}
-        responseData = sms.send_message(
-            {
-                "from": "14509131037",
-                "to": "16475614010",
-                "text": f"Transfer confirmed. Account {sinbad_recipient_final} received {amount} in block: {transaction.blockNumber}",
-            }
-        )
-
-        if responseData["messages"][0]["status"] == "0":
-            print("Message sent successfully.")
-        else:
-            print(f"Message failed with error: {responseData['messages'][0]['error-text']}")
+        return []
 
 class ValidateSendTransferForm(FormValidationAction):
     def name(self) -> Text:
