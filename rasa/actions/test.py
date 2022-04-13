@@ -52,26 +52,36 @@
 
 # checkBalance(52255356381325153)
 
-import vonage
-import os
-from dotenv import load_dotenv
-load_dotenv()
+# import vonage
+# import os
+# from dotenv import load_dotenv
+# load_dotenv()
 
-vonage_api_key = os.environ.get("VONAGE_API_KEY")
-vonage_secret = os.environ.get("VONAGE_SECRET")
+# vonage_api_key = os.environ.get("VONAGE_API_KEY")
+# vonage_secret = os.environ.get("VONAGE_SECRET")
 
-client = vonage.Client(key=vonage_api_key, secret=vonage_secret)
-sms = vonage.Sms(client)
+# client = vonage.Client(key=vonage_api_key, secret=vonage_secret)
+# sms = vonage.Sms(client)
 
-responseData = sms.send_message(
-    {
-        "from": "14509131037",
-        "to": "16475614010",
-        "text": "A text message sent using the Nexmo SMS API",
-    }
-)
+# responseData = sms.send_message(
+#     {
+#         "from": "14509131037",
+#         "to": "16475614010",
+#         "text": "A text message sent using the Nexmo SMS API",
+#     }
+# )
 
-if responseData["messages"][0]["status"] == "0":
-    print("Message sent successfully.")
-else:
-    print(f"Message failed with error: {responseData['messages'][0]['error-text']}")
+# if responseData["messages"][0]["status"] == "0":
+#     print("Message sent successfully.")
+# else:
+#     print(f"Message failed with error: {responseData['messages'][0]['error-text']}")
+
+import requests
+
+url = "http://localhost:5005/webhooks/rest/webhook"
+payload = '{"message":""}'
+headers = {
+  'Content-Type': 'application/json'
+}
+response = requests.post(url, headers=headers, data = payload.encode('utf-8'))
+print("{}".format(response.json()[0]["text"]))

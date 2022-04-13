@@ -22,6 +22,7 @@ import vonage
 # Set up for transfers
 load_dotenv()
 network = os.environ.get("ETHEREUM_NETWORK")
+ngrok = os.environ.get("NGROK_REMOTE_URL")
 key = os.environ.get("SIGNER_PRIVATE_KEY")
 w3 = Web3(
     Web3.HTTPProvider(
@@ -39,7 +40,7 @@ acct = w3.eth.account.privateKeyToAccount(key)
 # Stand in list of existing account numbers for validate_transfer_recipient
 ALLOWED_ACCOUNT_NUMBERS = [1,2,3,4,5]
 ACCOUNT_MAPPING = {
-    "1": "0x68108C8C57A1e0C9A9841B901D81ED2E4a823377",
+    "1": "0x12cc9850b063579895adAA80A628eA60f2932ae2",
     "2": "0x43C0f22142337C0f938931F55Dfe21619375DB87"
 }
 
@@ -102,7 +103,7 @@ class SendReceipt(Action):
         print(receipt_payload)
 
         #put the async post request here for the txn receipt with slot values on node server
-        response = requests.post("http://53a6-99-228-62-199.ngrok.io/webhooks/receipt", json=receipt_payload)
+        response = requests.post(f"{ngrok}/webhooks/receipt", json=receipt_payload)
 
         return []
 
