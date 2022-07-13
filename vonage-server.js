@@ -40,18 +40,26 @@ const onInboundCall = (request, response) => {
   let ncco = [
     {
       action: "talk",
-      text: "Hi",
+      text: "This is Sinbad, how can I help you?",
       style: 6,
       premium: true,
     },
     {
       action: "input",
-      type: ["speech"],
-      eventUrl: [`${request.protocol}://${request.get("host")}/webhooks/asr`],
+      type: ["dtmf", "speech"],
+      eventUrl: [
+        `${request.protocol}://${request.get("host")}/webhooks/asr`,
+      ],
+      dtmf: {
+        timeOut: 10,
+        maxDigits: 6,
+        submitOnHash: true,
+      },
       speech: {
         language: "en-US",
-        uuid: [request.query.uuid],
-      },
+        startTimeout: 10,
+        endOnSilence: 4
+      }
     },
   ];
   return response.json(ncco);
@@ -60,16 +68,12 @@ const onInboundCall = (request, response) => {
 app
   .get("/webhooks/answer", onInboundCall)
   .post("/webhooks/events", (request, response) => {
-    console.log(request.body);
     return response.sendStatus(200);
   })
   .post("/webhooks/receipt", (request, response) => {
-    // const sendReceipt = async () => {
-    // python code begins
     const transactionHash = request.body.transaction_hash;
     const transferAmount = request.body.transfer_amount;
 
-    // console.log(`transfer amount: ${transferAmount}, \n transaction hash: ${transactionHash}`)
     const expectedBlockTime = 1000;
     const sleep = (milliseconds) => {
       return new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -82,16 +86,14 @@ app
         await sleep(expectedBlockTime);
       }
       const blockNumber = await receipt.blockNumber;
-      console.log(receipt.to);
       recipient = Object.keys(ACCOUNT_MAPPING).find(
         (key) => ACCOUNT_MAPPING[key] === receipt.to
       );
-      console.log(recipient);
       const from = "14509131037";
       const to = "16475614010";
       const text = `Transfer confirmed. Account ${recipient} received ${transferAmount} in block: ${blockNumber}`;
 
-      vonage.message.sendSms(from, to, text);
+      // vonage.message.sendSms(from, to, text);
       await vonage.message.sendSms(from, to, text, (err, responseData) => {
         if (err) {
           console.log(err);
@@ -108,23 +110,124 @@ app
     })();
     response.sendStatus(200);
   })
-  // })
+  .post("/webhooks/sendVerifySMS", (request, response) => {
+    vonage.verify.request(
+      {
+        number: "16475614010",
+        brand: "Vonage",
+      },
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          verifyRequestId = err.request_id;
+          sms_payload = [
+            {
+              request_id: verifyRequestId,
+            },
+          ];
+          response.json(sms_payload);
+        } else {
+          verifyRequestId = result.request_id;
+          console.log("request_id", verifyRequestId);
+          sms_payload = [
+            {
+              request_id: verifyRequestId,
+            },
+          ];
+          response.json(sms_payload);
+        }
+      }
+    );
+    // ncco = [
+    //   {
+    //     action: "talk",
+    //     language: "en-US",
+    //     style: 6,
+    //     premium: true,
+    //     text: `Please enter the 4 digit verification code you received via sms using the keypad or your voice.`,
+    //   },
+    //   {
+    //     action: "input",
+    //     type: ["speech", "dtmf"],
+    //     eventUrl: [`${request.protocol}://${request.get("host")}/webhooks/asr`],
+    //     speech: {
+    //       language: "en-US",
+    //     },
+    //     startTimeout: 60,
+    //     endOnSilence: 2,
+    //     timeOut: 5,
+    //   },
+    // ];
+    // response.json(ncco);
+  })
+  .post("/webhooks/verifySMS", (request, response) => {
+    sms_code = request.body.sms_code;
+    request_id = request.body.request_id;
+    vonage.verify.check(
+      {
+        request_id: request_id,
+        code: sms_code,
+      },
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          ("");
+          response.send(err);
+        } else {
+          console.log(result);
+          response.send(result);
+        }
+      }
+    );
+  })
   .post("/webhooks/asr", async (request, response) => {
     var ncco = [];
-    
-    if (request.body.speech.results) {
-      const speech = request.body.speech.results[0].text;
-      console.log(speech);
 
+      if (request.body.dtmf.digits == null && request.body.speech.results) {
+        speech = request.body.speech.results[0].text;
+        console.log(speech);
+      } else if (request.body.dtmf.digits != null) {
+        console.log(request.body)
+        speech = request.body.dtmf.digits;
+        console.log(speech);
+      } else {
+        ncco = [
+          {
+            action: "talk",
+            language: "en-US",
+            style: 6,
+            premium: true,
+            text: `Sorry, I didn't catch that. Please try again`,
+          },
+          {
+            action: "input",
+            type: ["dtmf", "speech"],
+            eventUrl: [
+              `${request.protocol}://${request.get("host")}/webhooks/asr`,
+            ],
+            dtmf: {
+              timeOut: 10,
+              maxDigits: 6,
+              submitOnHash: true,
+            },
+            speech: {
+              language: "en-US",
+              startTimeout: 10,
+              endOnSilence: 5
+            }
+          },
+        ];
+        response.json(ncco);
+      }
 
-      const sendMoney = async (asr) => {
-        await axios
-          .post("http://localhost:5005/webhooks/rest/webhook", {
-            sender: "test_user11", // sender ID of the user sending the message
+    const sendMoney = (asr) => {
+        axios
+        .post("http://localhost:5005/webhooks/rest/webhook", {
+          sender: "test_user1", // sender ID of the user sending the message
             message: asr,
           })
           .then((textResponse) => {
-            // console.log(textResponse.data);
+            // console.log(textResponse);
             var testResponses = textResponse.data;
             var smartResponse = "";
             testResponses.forEach((resp) => {
@@ -142,13 +245,20 @@ app
               },
               {
                 action: "input",
-                type: ["speech"],
+                type: ["dtmf", "speech"],
                 eventUrl: [
                   `${request.protocol}://${request.get("host")}/webhooks/asr`,
                 ],
+                dtmf: {
+                  timeOut: 10,
+                  maxDigits: 6,
+                  submitOnHash: true,
+                },
                 speech: {
                   language: "en-US",
-                },
+                  startTimeout: 10,
+                  endOnSilence: 3
+                }
               },
             ];
             response.json(ncco);
@@ -156,31 +266,9 @@ app
           .catch("error", (err) => {
             console.log("Error: " + err.message);
           });
-      };
-      sendMoney(speech);
-    } else {
-      ncco = [
-        {
-          action: "talk",
-          language: "en-US",
-          style: 6,
-          premium: true,
-          text: `Sorry, I didn't catch that. Please try again`,
-        },
-        {
-          action: "input",
-          type: ["speech"],
-          eventUrl: [
-            `${request.protocol}://${request.get("host")}/webhooks/asr`,
-          ],
-          speech: {
-            language: "en-US",
-          },
-        },
-      ];
-      response.json(ncco);
-    }
-  });
-
+        };
+        sendMoney(speech);
+    });
+      
 const port = 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));

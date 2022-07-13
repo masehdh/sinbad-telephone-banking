@@ -1,5 +1,10 @@
 version: "3.0"
 nlu:
+- synonym: 1
+  examples: |
+    - $1
+    - one dollar
+    - one
 - intent: inform
   examples: |
     - [1](number)
@@ -11,6 +16,9 @@ nlu:
     - [2567](number)
     - [721321567](number)
     - [534412](number)
+    - I want to send $[1]{"entity": "number", "role": "transfer_amount"}
+    - I want to send $[one]{"entity": "number", "role": "transfer_amount"}
+    - I want to send $[1] dollar {"entity": "number", "role": "transfer_amount"}
     - I want to send [333]{"entity": "number", "role": "transfer_amount"}
     - send [23]{"entity": "number", "role": "transfer_amount"}
     - I want to transfer [10]{"entity": "number", "role": "transfer_amount"}
@@ -50,6 +58,7 @@ nlu:
     - I want to send [1000000000000000000]{"entity": "number", "role": "transfer_amount"}
     - i want to send [100]{"entity": "number", "role": "transfer_amount"} dollars to account [3]{"entity": "number", "role": "transfer_recipient"}
     - I want to send [100]{"entity": "number", "role": "transfer_amount"} dollars
+    - I want to send [100]{"entity": "number", "role": "transfer_amount"} wei
     - I want to send money to account [4]{"entity": "number", "role": "transfer_recipient"}
     - send [100]{"entity": "number", "role": "transfer_amount"} dollars
     - send money to account [4]{"entity": "number", "role": "transfer_recipient"}

@@ -76,12 +76,12 @@
 # else:
 #     print(f"Message failed with error: {responseData['messages'][0]['error-text']}")
 
-import requests
+# import requests
 
-url = "http://localhost:5005/webhooks/rest/webhook"
-payload = '{"message":""}'
-headers = {
-  'Content-Type': 'application/json'
-}
-response = requests.post(url, headers=headers, data = payload.encode('utf-8'))
-print("{}".format(response.json()[0]["text"]))
+# url = "http://localhost:5005/webhooks/rest/webhook"
+# payload = '{"message":""}'
+# headers = {
+#   'Content-Type': 'application/json'
+# }
+# response = requests.post(url, headers=headers, data = payload.encode('utf-8'))
+# print("{}".format(response.json()[0]["text"]))

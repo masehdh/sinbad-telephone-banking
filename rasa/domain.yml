@@ -1,7 +1,7 @@
 version: '3.0'
 session_config:
   session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+  carry_over_slots_to_new_session: false
 intents:
 - inform
 - affirm
@@ -41,11 +41,47 @@ slots:
       conditions:
       - active_loop: send_transfer_form
         requested_slot: transfer_amount
+  pin_code:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: number
+      role: pin_code
+    - type: from_entity
+      entity: number
+      conditions:
+      - active_loop: user_authentication_form
+        requested_slot: pin_code
+  sms_code:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: number
+      role: sms_code
+    - type: from_entity
+      entity: number
+      conditions:
+      - active_loop: user_authentication_form
+        requested_slot: sms_code
+  request_id:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: custom
+  user_verified:
+    type: bool
+    influence_conversation: true
+    mappings:
+    - type: custom
   transaction_hash:
     type: text
     mappings:
     - type: custom
 responses:
+  utter_request_authentication:
+  - text: Before I process your request, I need to validate your account.
   utter_confirm_modify_transfer:
   - text: No problem.
   utter_confirm_reset_transfer:
@@ -58,6 +94,10 @@ responses:
   - text: What account do you want to send money to?
   utter_ask_transfer_amount:
   - text: How much money do you want to send?
+  utter_ask_pin_code:
+  - text: Please enter your 6-digit pin code.
+  utter_ask_sms_code:
+  - text: Please enter your 4-digit sms code.
   utter_ask_continue:
   - text: Are you sure you want to cancel this transfer?
   utter_submit:
@@ -88,7 +128,15 @@ actions:
 - utter_send_transfer_slots
 - utter_submit
 - validate_send_transfer_form
+- validate_user_authentication_form
+- utter_request_authentication
+- utter_ask_sms_code
+- utter_ask_pin_code
 forms:
+  user_authentication_form:
+    required_slots:
+    - pin_code
+    - sms_code
   send_transfer_form:
     required_slots:
     - transfer_recipient

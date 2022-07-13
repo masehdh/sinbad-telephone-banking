@@ -43,6 +43,7 @@ ACCOUNT_MAPPING = {
     "1": "0x12cc9850b063579895adAA80A628eA60f2932ae2",
     "2": "0x43C0f22142337C0f938931F55Dfe21619375DB87"
 }
+PIN_NUMBER = 123456
 
 # change this action to match new number, role slot mappings if necessary:
 class ActionSendTransfer(Action):
@@ -107,6 +108,81 @@ class SendReceipt(Action):
 
         return []
 
+# class SendSMSVerification(Action):
+
+#     def name(self) -> Text:
+#         return "send_sms_verification"
+
+#     async def run(
+#         self,
+#         dispatcher: CollectingDispatcher,
+#         tracker: Tracker,
+#         domain: Dict[Text, Any],
+#     ) -> List[Dict[Text, Any]]:
+
+#         #put the async post request here for the txn receipt with slot values on node server
+#         response = await requests.post(f"{ngrok}/webhooks/receipt")
+#         request_id = response.data.request_id
+#         return [SlotSet(key="request_id", value=request_id)]
+    
+
+class ValidateUserAuthenticationForm(FormValidationAction):
+    def name(self) -> Text:
+        return "validate_user_authentication_form"
+    
+    def validate_pin_code(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[int, Any]:
+        """ Verify pin code """
+        pin_code = int(tracker.get_slot("pin_code"))
+
+        if pin_code != 123456:
+            dispatcher.utter_message(text=f'Pin code is incorrect.')
+            return {'pin_code': None}
+            # return [SlotSet(key="pin_code", value=None), SlotSet(key="user_verified", value=False)]
+        
+        response = requests.post(f"{ngrok}/webhooks/sendVerifySMS")
+        response2 = response.json()
+        request_id = response2[0]['request_id']
+        
+        return {'pin_code': pin_code, 'request_id': request_id}
+        # return [SlotSet(key="pin_code", value=pin_code), SlotSet(key="user_verified", value=True)]
+
+    def validate_sms_code(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[int, Any]:
+        """ Verify sms code for transaction """
+        request_id = tracker.get_slot("request_id")
+        sms_code = int(tracker.get_slot("sms_code"))
+
+        sms_payload = {
+            "request_id": request_id,
+            "sms_code": sms_code 
+        }
+        
+        response = requests.post(f"{ngrok}/webhooks/verifySMS", json=sms_payload)
+        response2 = response.json()
+        if response2["status"] == "0":
+            return {'user_verified': True, 'sms_code': sms_code}
+
+        if response2["status"] == "16":
+            dispatcher.utter_message(text=f'SMS code is incorrect, please try again')
+            return {'user_verified':False, 'sms_code': None}
+
+        # if response.status == "17":
+        #     dispatcher.utter_message(text=f'Too many incorrect attempts, sending a new code')
+        #     response = requests.post(f"{ngrok}/webhooks/sendVerifySMS")
+        #     request_id = response.data.request_id
+        #     return {'user_verified':False, 'sms_code': None, 'request_id': request_id}
+
 class ValidateSendTransferForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_send_transfer_form"
@@ -143,7 +219,7 @@ class ValidateSendTransferForm(FormValidationAction):
         # transfer_amount = int(self.from_entity(entity="number", role="transfer_recipient"))
         
 
-        transfer_amount = int(transfer_amount)
+        # transfer_amount = int(transfer_amount)
         if transfer_amount <= 0:
                 dispatcher.utter_message(text=f'This is an invalid transfer amount, please try again.')
                 return {"transfer_amount": None}  
@@ -171,5 +247,6 @@ class ActionSlotReset(Action):
 
       # custom behavior
 
-      return [AllSlotsReset()]
+    #   return [AllSlotsReset()]
+    return [SlotSet(key='transfer_amount', value=None), SlotSet(key='transfer_recipient', value=None)]
     
