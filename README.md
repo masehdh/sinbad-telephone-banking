@@ -1,8 +1,8 @@
 # sinbad-telephone-banking
 
-This repository is for the telephone banking arm of Sinbad. The user story is this:
+This repository is for the telephone banking arm of Sinbad. The big picture is this:
 
-* Users can call a phone number specific to their country, and using an interactive voice response menu in their language and get  access to almost everything that users of the app have. 
+* Users can call a phone number specific to their country, and using an interactive voice response menu in their language, get  access to almost everything that users of the app have. 
 
 They can see their account balance and transfer history, send transfers, and change their account details.
 
