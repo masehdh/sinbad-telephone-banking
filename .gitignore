@@ -4,3 +4,4 @@ rasa/venv
 rasa/models
 azure
 rasa/.rasa
+private.key
